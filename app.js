@@ -1,8 +1,9 @@
 var createError = require('http-errors');
-var express = require('express');
-var path = require('path');
-var cookieParser = require('cookie-parser');
-var logger = require('morgan');
+const express = require('express');
+const path = require('path');
+const cookieParser = require('cookie-parser');
+const logger = require('morgan');
+const hbs = require('hbs');
 
 var router = require('./src/modules/index');
 
@@ -10,7 +11,13 @@ var app = express();
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'ejs');
+app.set('view engine', 'hbs');
+
+// Register Handlebars helpers
+hbs.registerHelper('currentYear', () => new Date().getFullYear());
+
+// Register partials
+hbs.registerPartials(path.join(__dirname, 'views/partials'));
 
 app.use(logger('dev'));
 app.use(express.json());
