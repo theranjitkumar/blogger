@@ -1,6 +1,180 @@
-{{> header title='Home' }}
-<main>
-    <h2>Welcome to My Blog</h2>
-    <p>This is the home page.</p>
-</main>
+{{> header title='Home' active='home' }}
+
+<!-- Hero Section -->
+<section class="bg-primary bg-gradient text-white py-5">
+    <div class="container py-5">
+        <div class="row align-items-center">
+            <div class="col-lg-6">
+                <h1 class="display-4 fw-bold mb-3">Share Your Stories With The World</h1>
+                <p class="lead mb-4">Join our community of writers and readers. Publish your thoughts, ideas, and stories in minutes.</p>
+                <div class="d-flex gap-3">
+                    <a href="/auth/register" class="btn btn-light btn-lg px-4">Start Writing</a>
+                    <a href="#featured-posts" class="btn btn-outline-light btn-lg px-4">Read Stories</a>
+                </div>
+            </div>
+            <div class="col-lg-6 d-none d-lg-block">
+                <img src="/img/hero-illustration.svg" alt="Blogging illustration" class="img-fluid">
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Featured Categories -->
+<section class="py-5">
+    <div class="container">
+        <h2 class="text-center mb-5">Explore Categories</h2>
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="card h-100 border-0 shadow-sm hover-shadow transition-all">
+                    <div class="card-body text-center p-4">
+                        <div class="bg-primary bg-opacity-10 text-primary rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 80px; height: 80px;">
+                            <i class="bi bi-lightbulb" style="font-size: 2rem;"></i>
+                        </div>
+                        <h5>Technology</h5>
+                        <p class="text-muted">Latest in tech, programming, and innovation</p>
+                        <a href="/category/technology" class="stretched-link"></a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card h-100 border-0 shadow-sm hover-shadow transition-all">
+                    <div class="card-body text-center p-4">
+                        <div class="bg-success bg-opacity-10 text-success rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 80px; height: 80px;">
+                            <i class="bi bi-heart" style="font-size: 2rem;"></i>
+                        </div>
+                        <h5>Lifestyle</h5>
+                        <p class="text-muted">Health, wellness, and daily inspiration</p>
+                        <a href="/category/lifestyle" class="stretched-link"></a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card h-100 border-0 shadow-sm hover-shadow transition-all">
+                    <div class="card-body text-center p-4">
+                        <div class="bg-warning bg-opacity-10 text-warning rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 80px; height: 80px;">
+                            <i class="bi bi-globe" style="font-size: 2rem;"></i>
+                        </div>
+                        <h5>Travel</h5>
+                        <p class="text-muted">Discover amazing places around the world</p>
+                        <a href="/category/travel" class="stretched-link"></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Featured Posts -->
+<section id="featured-posts" class="py-5 bg-light">
+    <div class="container">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2>Featured Stories</h2>
+            <a href="/posts" class="btn btn-outline-primary">View All</a>
+        </div>
+        
+        <div class="row g-4">
+            {{#if posts.length}}
+                {{#each posts}}
+                <div class="col-md-6 col-lg-4">
+                    <div class="card h-100 border-0 shadow-sm">
+                        {{#if this.image}}
+                        <img src="{{this.image}}" class="card-img-top" alt="{{this.title}}" style="height: 200px; object-fit: cover;">
+                        {{else}}
+                        <div class="bg-secondary bg-opacity-10 d-flex align-items-center justify-content-center" style="height: 200px;">
+                            <i class="bi bi-image text-muted" style="font-size: 3rem;"></i>
+                        </div>
+                        {{/if}}
+                        <div class="card-body">
+                            <div class="d-flex align-items-center mb-2">
+                                <span class="badge bg-primary me-2">{{this.category}}</span>
+                                <small class="text-muted">{{formatDate this.createdAt}}</small>
+                            </div>
+                            <h5 class="card-title">{{this.title}}</h5>
+                            <p class="card-text text-muted">{{truncate this.content 150}}</p>
+                        </div>
+                        <div class="card-footer bg-transparent border-top-0 d-flex justify-content-between align-items-center">
+                            <div class="d-flex align-items-center">
+                                <img src="{{this.author.avatar}}" class="rounded-circle me-2" width="32" height="32" alt="{{this.author.name}}">
+                                <span>{{this.author.name}}</span>
+                            </div>
+                            <a href="/posts/{{this.slug}}" class="stretched-link"></a>
+                        </div>
+                    </div>
+                </div>
+                {{/each}}
+            {{else}}
+                <div class="col-12 text-center py-5">
+                    <div class="bg-light p-5 rounded-3">
+                        <i class="bi bi-file-earmark-text display-1 text-muted mb-4"></i>
+                        <h3>No posts yet</h3>
+                        <p class="lead">Be the first to share your story!</p>
+                        {{#unless user}}
+                        <a href="/auth/register" class="btn btn-primary">Join Now</a>
+                        {{/unless}}
+                    </div>
+                </div>
+            {{/if}}
+        </div>
+    </div>
+</section>
+
+<!-- CTA Section -->
+<section class="py-5 bg-primary text-white">
+    <div class="container text-center py-5">
+        <h2 class="mb-4">Ready to start writing?</h2>
+        <p class="lead mb-4">Join thousands of writers sharing their stories with the world.</p>
+        {{#if user}}
+            <a href="/posts/new" class="btn btn-light btn-lg px-4">Create Post</a>
+        {{else}}
+            <a href="/auth/register" class="btn btn-light btn-lg px-4 me-2">Get Started</a>
+            <a href="/about" class="btn btn-outline-light btn-lg px-4">Learn More</a>
+        {{/if}}
+    </div>
+</section>
+
+<!-- Recent Comments -->
+<section class="py-5">
+    <div class="container">
+        <h2 class="text-center mb-5">Recent Comments</h2>
+        <div class="row">
+            <div class="col-lg-8 mx-auto">
+                <div class="list-group">
+                    {{#if comments.length}}
+                        {{#each comments}}
+                        <div class="list-group-item border-0 shadow-sm mb-3 rounded-3">
+                            <div class="d-flex">
+                                <img src="{{this.user.avatar}}" class="rounded-circle me-3" width="48" height="48" alt="{{this.user.name}}">
+                                <div>
+                                    <div class="d-flex justify-content-between">
+                                        <h6 class="mb-1">{{this.user.name}}</h6>
+                                        <small class="text-muted">{{timeAgo this.createdAt}}</small>
+                                    </div>
+                                    <p class="mb-1">{{this.content}}</p>
+                                    <small class="text-muted">On: <a href="/posts/{{this.post.slug}}" class="text-decoration-none">{{this.post.title}}</a></small>
+                                </div>
+                            </div>
+                        </div>
+                        {{/each}}
+                    {{else}}
+                        <div class="text-center py-4">
+                            <i class="bi bi-chat-square-text display-4 text-muted mb-3"></i>
+                            <p class="text-muted">No comments yet. Be the first to comment!</p>
+                        </div>
+                    {{/if}}
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
 {{> footer}}
+
+<style>
+.hover-shadow {
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+.hover-shadow:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 0.5rem 1.5rem rgba(0, 0, 0, 0.1) !important;
+}
+</style>
